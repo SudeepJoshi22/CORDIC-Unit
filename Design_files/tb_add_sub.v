@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 // Author: Sudeep Joshi
 // Date: 24/08/2023
-// Description: Test Bench for Addition and Substraction module. In the CORDIC unit Q8.24 fixed-point representation is chosen
+// Description: Test Bench for Addition and Substraction module. In the CORDIC unit (Q3.29 fixed-point representation is chosen)
 ////////////////////////////////////////////////////////////////////////////////
 
 module tb_add_sub;
@@ -30,8 +30,8 @@ initial begin
         $dumpvars(0, tb_add_sub);
        	$monitor("Result: %b +/- %b = %b (add/sub = %b)", X, Y, result,a_s); 
        
-        X = 32'b11110110_001000000000000000000000; //-10.125 in Q7.25
-        Y = 32'b00010100_000111001010110000010000; //20.112 in Q7.25
+        X = 32'b111_10101111100111011011001000110; //-0.314 in Q3.29
+        Y = 32'b000_11101000111101011100001010001; //0.91 in Q3.29
         a_s = 0; 
         #10;
         a_s = 1; 
