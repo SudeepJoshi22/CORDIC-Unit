@@ -40,18 +40,12 @@ def convertFloat2Fixed(n, q1, q2):
     fOrdinate = k - int(k)
 
   #print(bOrdinate)
-  frac = bOrdinate
+
   if (negFlag):
-    frac = bOrdinate
-    dec = int(bMantissa)
-    #print(dec)
     bMantissa, bOrdinate = twosComplement(bMantissa, bOrdinate, q1, q2)
-    if dec == 0:
-    	print(f"The Q{q1}.{q2} Representation is:{bMantissa}_{bOrdinate}")
-    else:
-    	print(f"The Q{q1}.{q2} Representation is:{bMantissa}_{frac}")
+    print(f"The binary is {bMantissa}_{bOrdinate}")
   else:
-    print(f"The Q{q1}.{q2} Representation is:{bMantissa}_{frac}")
+    print(f"The binary is {bMantissa}_{bOrdinate}")
 
 def twosComplement(bMantissa, bOrdinate, q1, q2):
   bString = list(bMantissa + bOrdinate)
@@ -79,4 +73,4 @@ def twosComplement(bMantissa, bOrdinate, q1, q2):
   return ''.join(bString[0:q1]), ''.join(bString[q1:])
   
 a = float(input("Enter the number: "))
-convertFloat2Fixed(a, 3, 29)
+convertFloat2Fixed(a, 4, 28)
