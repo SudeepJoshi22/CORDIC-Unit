@@ -76,9 +76,7 @@ To test the module in both modes following inputs are provided:
     $finish;
 ```
 
-The expected outputs for these are 
->cos(60)/0.6072 = 0.82345191 
-and 
->sin(60)/0.6072 
+The expected outputs for these are _cos(60)/0.6072 = 0.82345191_ and _sin(60)/0.6072 = 1.426260546_
 (scaling correction is not employed currently)
 
+![output](https://github.com/SudeepJoshi22/SynthoSphere_CORDIC_Unit/blob/main/images/output.png)
