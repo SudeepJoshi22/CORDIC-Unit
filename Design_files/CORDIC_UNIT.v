@@ -34,9 +34,6 @@ arctan_lookup #(N) ARCTAN_TABLE(
 .arctan(arctan)
 );
 
-initial
-	j = 0;
-	
 always @(posedge clk)
 begin
 	X[0] <= Xi;
@@ -44,33 +41,40 @@ begin
 	Z[0] <= angle;
 end
 
+initial
+	j <= 0;
+
 
 genvar i;
 
 generate
-for(i = 0;i < I;i = i+1)
+for(i = 0;i < I-1;i = i+1)
 begin
 	wire sign;
 	wire [N-1:0] X_sft,Y_sft,X_in,Y_in,Z_in,X_out,Y_out,Z_out;
+
+	assign sign = Z[i][31];	
+	
 	always @(posedge clk)
 	begin
 		j <= j+1;
-		X[j+1] <= X_out;
-		Y[j+1] <= Y_out;
-		Z[j+1] <= Z_out;
+		X[i+1] <= X_out;
+		Y[i+1] <= Y_out;
+		Z[i+1] <= Z_out;
 	end
 	
-	shift #(N) sftX(X[j],j,X_sft);
-	shift #(N) sftY(Y[j],j,Y_sft);
+	assign X_in = X[i];
+	assign Y_in = Y[i];
+	assign Z_in = Z[i];
 	
-	assign sign = Z[j][31];
-	assign X_in = X[j];
-	assign Y_in = Y[j];
-	assign Z_in = Z[j];
+
 	
-	add_sub #(N) add_sub_X(X_in,Y_sft,~sign,X_out);
-	add_sub #(N) add_sub_Y(Y_in,X_sft,sign,Y_out);
-	add_sub #(N) add_sub_Z(Z_in,arctan,~sign,Z_out);
+	shift #(N) sftX(X[i],j,X_sft);
+	shift #(N) sftY(Y[i],j,Y_sft);
+	
+	add_sub #(N) add_sub_X(clk,X_in,Y_sft,~sign,X_out);
+	add_sub #(N) add_sub_Y(clk,Y_in,X_sft,sign,Y_out);
+	add_sub #(N) add_sub_Z(clk,Z_in,arctan,~sign,Z_out);
 
 end
 endgenerate
