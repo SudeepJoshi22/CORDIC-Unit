@@ -22,7 +22,7 @@ The module can work in two modes
 1. Trigonometric mode
 2. Vector rotation mode
 
-In the _Trigonometric mode_ (`trig_rot = 1`) the _sin_ and _cos_ of the given _angle_ is computed. In the _Vector rotation mode_.(`trig_rot = 0`) , inputs _Xi_ and _Yi_ are rotated by the angle provided by the input _angle_
+In the *Trigonometric mode* (`trig_rot = 1`) the *sin* and *cos* of the given *angle* is computed. In the _Vector rotation mode_.(`trig_rot = 0`) , inputs *Xi* and *Yi* are rotated by the angle provided by the input *angle*
 
 ![module](https://github.com/SudeepJoshi22/SynthoSphere_CORDIC_Unit/blob/main/images/module.jpg)
 
