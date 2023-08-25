@@ -80,3 +80,20 @@ The expected outputs for these are _cos(60)/0.6072 = 0.82345191_ and _sin(60)/0.
 (scaling correction is not employed currently)
 
 ![output](https://github.com/SudeepJoshi22/SynthoSphere_CORDIC_Unit/blob/main/images/output.png)
+![output](https://github.com/SudeepJoshi22/SynthoSphere_CORDIC_Unit/blob/main/images/Screenshot%20from%202023-08-26%2003-07-10.png)
+Cos:
+![cos](https://github.com/SudeepJoshi22/SynthoSphere_CORDIC_Unit/blob/main/images/cos.png)
+Sin:
+![sin](https://github.com/SudeepJoshi22/SynthoSphere_CORDIC_Unit/blob/main/images/sin.png)
+Xr:
+![xr](https://github.com/SudeepJoshi22/SynthoSphere_CORDIC_Unit/blob/main/images/Xr.png)
+Yr:
+![yr](https://github.com/SudeepJoshi22/SynthoSphere_CORDIC_Unit/blob/main/images/Yr.png)
+Xr and Yr are imprecise due to unknown reasons.
+
+## YOSYS Synthesis
+![yosys1](https://github.com/SudeepJoshi22/SynthoSphere_CORDIC_Unit/blob/main/images/Screenshot%20from%202023-08-25%2023-59-42.png)
+![yosys2](https://github.com/SudeepJoshi22/SynthoSphere_CORDIC_Unit/blob/main/images/Screenshot%20from%202023-08-26%2000-05-20.png)
+
+## Netlist
+
