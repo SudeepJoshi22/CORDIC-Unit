@@ -49,7 +49,7 @@ def convertFloat2Fixed(n, q1, q2):
     if dec == 0:
     	print(f"The Q{q1}.{q2} Representation is:{bMantissa}_{bOrdinate}")
     else:
-    	print(f"The Q{q1}.{q2} Representation is:{bMantissa}_{bOrdinate}")
+    	print(f"The Q{q1}.{q2} Representation is:{bMantissa}_{frac}")
   else:
     print(f"The Q{q1}.{q2} Representation is:{bMantissa}_{frac}")
 
