@@ -32,18 +32,12 @@ CORDIC_UNIT #(32, 10) dut (
 initial begin
     $dumpfile("waveform.vcd");
     $dumpvars(0, dut);
+    $monitor("Time = %0t: angle = %b, Xi = %b, Yi = %b, sin = %b, cos = %b, Xr = %b, Yr = %b", $time, angle, Xi, Yi, sin, cos, Xr, Yr);
     
     clk = 0;
     trig_rot = 0;
-    angle = 0;
-    Xi = 0;
-    Yi = 0;
-    
-    $monitor("Time = %0t: angle = %b, Xi = %b, Yi = %b, sin = %b, cos = %b, Xr = %b, Yr = %b", $time, angle, Xi, Yi, sin, cos, Xr, Yr);
-    
-    #10;
     trig_rot = 1;
-    angle = 32'b000_11001001000011111101101010100;
+    angle = 32'b001_00001100000101010010001110000;
     Xi = 32'b001_00000000000000000000000000000;
     Yi = 32'b000_00000000000000000000000000000;
     
