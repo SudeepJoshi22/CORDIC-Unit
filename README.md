@@ -8,13 +8,13 @@ One of the common applications can be found in **DSP(Digital Signal Processing)*
 ## Iterative Equations of CORDIC
 ![equations](https://github.com/SudeepJoshi22/SynthoSphere_CORDIC_Unit/blob/main/images/Screenshot%20from%202023-08-26%2000-49-17.png)
 
-These iterative equations rotates the vector (x,y) by the given angle angle. The σ is the sign of the z[i+1]. The angle to be rotated is initialized into z[0] and after N number of iterations, the rotated vector is obtained which is scaled by a factor of K = 0.6072 .
+These iterative equations rotates the vector (x,y) by the given angle angle. 'σ' is the sign of z[i+1]. The angle to be rotated is initialized into z[0] and after N number of iterations, the rotated vector is obtained which is scaled by a factor of K = 0.6072 .
 ![rotations](https://github.com/SudeepJoshi22/SynthoSphere_CORDIC_Unit/blob/main/images/Screenshot%20from%202023-08-26%2000-49-57.png)	
 
 Reference: (https://www.allaboutcircuits.com/technical-articles/an-introduction-to-the-cordic-algorithm/)
 
 ## Choosing the fixed-point representation format
-As most of the DSP processors are 32-bit, 32-bit representation is used. To represent integers(decimal +  fraction) in binary, Qm.n fixed-point representation is employed in most of the processors. 'm' represents the number of bits to indicate decimal part(including sign bit) and 'n' represents the number of bits used to represent fractional part.
+As most of the DSP processors are 32-bit, 32-bit representation is used here. To represent integers(decimal +  fraction) in binary, Qm.n fixed-point representation is employed in most of the processors. Where 'm' represents the number of bits used to indicate decimal part(including sign bit) and 'n' represents the number of bits used to represent fractional part.
 In the design **Q3.29** representation is chosen. 29-bits for fractional part to provide high resolution to the fractional part.
 
 ## Module Design [CORDIC_UNIT.v](Design_files/CORDIC_UNIT.v)
@@ -22,7 +22,7 @@ The module can work in two modes
 1. Trigonometric mode
 2. Vector rotation mode
 
-In the _Trigonometric mode_ the _sin_ and _cos_ of the given _angle_ is computed. In the _Vector rotation mode_, inputs _Xi_ and _Yi_ is rotated by the angle provided by the input _angle_
+In the _Trigonometric mode_ (`trig_rot = 1`) the _sin_ and _cos_ of the given _angle_ is computed. In the _Vector rotation mode_.(`trig_rot = 0`) , inputs _Xi_ and _Yi_ are rotated by the angle provided by the input _angle_
 
 ![module](https://github.com/SudeepJoshi22/SynthoSphere_CORDIC_Unit/blob/main/images/module.jpg)
 
