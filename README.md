@@ -61,4 +61,18 @@ The incrementat/decrement angle is taken from the look-up table given below:
 | 27  | 0.000000008 |        0.000001 | 000_00000000000000000000000000001          |
 | 28  | 0.000000004 |        0.000000 | 000_00000000000000000000000000000          |
 
+## [Test Bench](Design_files/tb_CORDIC_UNIT.v) and Results
+To test the module in both modes following inputs are provided:
+```
+    trig_rot = 1;
+    angle = 32'b001_00001100000101010010001110000; // pi/3(60 degrees)
+    
+    #200
+    trig_rot = 0; 
+    angle = 32'b000_10000110000001000001100010010; // pi/6(30 degrees)
+    Xi = 32'b000_10110101000001001110011000011; // 1/sqrt(2)
+    Yi = 32'b000_10110101000001001110011000011; // 1/sqrt(2)
+    #185
+    $finish;
+```
 
