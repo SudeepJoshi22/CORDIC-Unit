@@ -95,5 +95,5 @@ Xr and Yr are imprecise due to unknown reasons.
 ![yosys1](https://github.com/SudeepJoshi22/SynthoSphere_CORDIC_Unit/blob/main/images/Screenshot%20from%202023-08-25%2023-59-42.png)
 ![yosys2](https://github.com/SudeepJoshi22/SynthoSphere_CORDIC_Unit/blob/main/images/Screenshot%20from%202023-08-26%2000-05-20.png)
 
-## Netlist
+## [Netlist dot file](netlist.ps) (very large to show in image)
 
