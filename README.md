@@ -31,7 +31,7 @@ A parallel architecture is employed in the design. [add_sub.v](Design_files/add_
 The architecture of the single stage is given below:
 ![archi](https://github.com/SudeepJoshi22/SynthoSphere_CORDIC_Unit/blob/main/images/archi.jpg)
 
-The incrementat/decrement angle( arctan(2^(-i))) is taken from the look-up table given below:
+The incrementat/decrement angle( arctan(2^(-i)) ) is taken from the look-up table given below:
 | i   | 2^(-i)      | Angle (Degrees) | Binary Value                                |
 |----:|------------:|----------------:|:--------------------------------------------:|
 |  0  | 1.000000000 |              45 | 000_11001001000011111101101010100          |
