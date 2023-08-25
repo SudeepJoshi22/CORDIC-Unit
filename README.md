@@ -10,6 +10,6 @@ x[i+1]=x[i]−σi2−iy[i]
 
 y[i+1]=y[i]+σi2−ix[i]
 
-z[i+1]=z[i]−σitan−1(2−i)
+z[i+1]=z[i]−σitan−1(2^−i)
 
 
