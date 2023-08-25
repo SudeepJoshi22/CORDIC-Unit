@@ -15,3 +15,5 @@ This iterative equations rotates the vector (x,y) by an angle. The σ is the sig
 As most of the DSP processors are 32-bit, 32-bit representation is used. To represent integers(decimal +  fraction) in binary Qm.n fixed-point representation is employed in most of the processors. 'm' represents the number of bits to indicate decimal part(including sign bit) and 'n' represents the number of bits used to represent fractional part.
 In the design **Q3.29** representation is chosen. 29-bits for fractional part to provide higher precision in the fractional part.
 
+## Module Design [CORDIC_UNIT.v](Design_files/CORDIC_UNIT.v)
+
