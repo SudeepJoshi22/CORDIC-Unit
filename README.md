@@ -76,3 +76,9 @@ To test the module in both modes following inputs are provided:
     $finish;
 ```
 
+The expected outputs for these are 
+>cos(60)/0.6072 = 0.82345191 
+and 
+>sin(60)/0.6072 
+(scaling correction is not employed currently)
+
