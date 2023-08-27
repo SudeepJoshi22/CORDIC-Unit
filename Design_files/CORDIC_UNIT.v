@@ -23,9 +23,9 @@ output signed [N-1:0] Xr,
 output signed [N-1:0] Yr
 );
 
-reg signed [N-1:0] X [0:I-1];
-reg signed [N-1:0] Y [0:I-1];
-reg signed [N-1:0] Z [0:I-1];
+wire signed [N-1:0] X [0:I-1];
+wire signed [N-1:0] Y [0:I-1];
+wire signed [N-1:0] Z [0:I-1];
 
 wire [N-1:0] lookup_table[0:31];
 
@@ -59,6 +59,7 @@ assign lookup_table[26] = 32'b000_00000000000000000000000000011;
 assign lookup_table[27] = 32'b000_00000000000000000000000000001;
 assign lookup_table[28] = 32'b000_00000000000000000000000000000;
 	
+/*
 always @(posedge clk)
 begin
 	if(~trig_rot) //If rotation of the vector is needed
@@ -74,6 +75,10 @@ begin
 		Z[0] <= angle;
 	end
 end
+*/
+assign X[0] = trig_rot? 32'b001_00000000000000000000000000000 : Xi;
+assign Y[0] = trig_rot? 32'b000_00000000000000000000000000000 : Yi;
+assign Z[0] = angle;
 
 genvar i;
 wire [N-1:0] j;
@@ -86,7 +91,7 @@ begin
 
 	assign sign = Z[i][N-1];	
 	
-	
+	/*
 	always @(posedge clk)
 	begin
 		X[i+1] <= X_out;
@@ -95,17 +100,20 @@ begin
 		//$display("i = %d, X_in = %b, Y_in = %b, Z_in = %b, X_sft = %b, Y_sft = %b, X_out = %b, Y_out = %b, Z_out = %b",i,X_in,Y_in,Z_in,X_sft,Y_sft,X_out,Y_out,Z_out);
 	end
 	
+	
 	assign X_in = X[i];
 	assign Y_in = Y[i];
 	assign Z_in = Z[i];
-
+	*/
+	
 	assign X_sft = X[i] >>> i;
 	assign Y_sft = Y[i] >>> i;
 	
-	add_sub #(N) add_sub_X(clk,X_in,Y_sft,~sign,X_out);
-	add_sub #(N) add_sub_Y(clk,Y_in,X_sft,sign,Y_out);
-	add_sub #(N) add_sub_Z(clk,Z_in,lookup_table[i],~sign,Z_out);
-
+	add_sub #(N) add_sub_X(X[i],Y_sft,~sign,X[i+1]);
+	add_sub #(N) add_sub_Y(Y[i],X_sft,sign,Y[i+1]);
+	add_sub #(N) add_sub_Z(Z[i],lookup_table[i],~sign,Z[i+1]);
+	
+	
 end
 endgenerate
 

@@ -73,4 +73,4 @@ def twosComplement(bMantissa, bOrdinate, q1, q2):
   return ''.join(bString[0:q1]), ''.join(bString[q1:])
   
 a = float(input("Enter the number: "))
-convertFloat2Fixed(a, 3, 29)
+convertFloat2Fixed(a, 4, 29)
