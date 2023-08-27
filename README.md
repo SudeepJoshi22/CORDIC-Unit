@@ -72,7 +72,7 @@ To test the module in both modes following inputs are provided:
     
     #200
     trig_rot = 0; 
-    angle = 32'b000_10000110000001000001100010010; // pi/6(30 degrees)
+    angle = 32'b000_01000011000001010100100100001; // pi/12 (15 degrees)
     Xi = 32'b000_10110101000001001110011000011; // 1/sqrt(2)
     Yi = 32'b000_10110101000001001110011000011; // 1/sqrt(2)
     #185
@@ -97,7 +97,6 @@ Xr:
 Yr:
 ![yr](https://github.com/SudeepJoshi22/SynthoSphere_CORDIC_Unit/blob/main/images/Yr.png)
 
-Xr and Yr are imprecise due to unknown reasons.
 
 ## YOSYS Synthesis
 ![yosys1](https://github.com/SudeepJoshi22/SynthoSphere_CORDIC_Unit/blob/main/images/Screenshot%20from%202023-08-25%2023-59-42.png)
