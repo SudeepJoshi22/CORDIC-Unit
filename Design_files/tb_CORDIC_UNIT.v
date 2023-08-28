@@ -7,7 +7,6 @@
 
 module test_cordic_unit;
 
-reg clk;
 reg trig_rot;
 reg signed [31:0] angle;
 reg signed [31:0] Xi;
@@ -17,8 +16,7 @@ wire signed [31:0] cos;
 wire signed [31:0] Xr;
 wire signed [31:0] Yr;
 
-CORDIC_UNIT #(32, 10) dut (
-    .clk(clk),
+CORDIC_UNIT #(32, 20) dut (
     .trig_rot(trig_rot),
     .angle(angle),
     .Xi(Xi),
@@ -34,20 +32,19 @@ initial begin
     $dumpvars(0, dut);
     $monitor("Time = %0t: trig_rot = %b, angle = %b, Xi = %b, Yi = %b, sin = %b, cos = %b, Xr = %b, Yr = %b", $time,trig_rot, angle, Xi, Yi, sin, cos, Xr, Yr);
     
-    clk = 0;
     trig_rot = 1;
-    angle = 32'b001_00001100000101010010001110000; // pi/3(60 degrees)
+    angle = 32'b0001_0000110000010101001000111000; // pi/3(60 degrees)
     
     #10
     trig_rot = 0; 
-    angle = 32'b000_01000011000001010100100100001; // pi/12 (15 degrees)
-    Xi = 32'b000_10110101000001001111001100110; // 1/sqrt(2)
-    Yi = 32'b000_10110101000001001111001100110; // 1/sqrt(2)
+    Xi = 32'b0000_1011010100000100111100110011; // 1/sqrt(2)
+    Yi = 32'b0000_1011010100000100111100110011; // 1/sqrt(2)
     #10
+    angle = 32'b0000_1000011000001010100001001011;
+    Xi = 32'b0000_0000000000000000000000000000;
+    Yi = 32'b0001_0000000000000000000000000000;
     $finish;
 end
-
-always #5 clk = ~clk;
 
 endmodule
 
