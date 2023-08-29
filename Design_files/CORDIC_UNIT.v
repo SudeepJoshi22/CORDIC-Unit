@@ -82,9 +82,9 @@ begin
 end
 endgenerate
 
-assign Xr = (trig_rot)? 32'dz : X[I-1];
-assign Yr = (trig_rot)? 32'dz : Y[I-1];
-assign sin = (trig_rot)? Y[I-1] : 32'dz;
-assign cos = (trig_rot)? X[I-1] : 32'dz;
+assign Xr = (trig_rot)? 32'dz : ( X[I-1][N-1] ? -((~X[I-1] + 1)*(0.6071)) : (X[I-1]*0.6072) );
+assign Yr = (trig_rot)? 32'dz : ( Y[I-1][N-1] ? -((~Y[I-1] + 1)*(0.6072)) : (Y[I-1]*0.6072) );
+assign sin = (trig_rot)? ( Y[I-1][N-1] ? -((~Y[I-1] + 1)*(0.6072)) : (Y[I-1]*0.6072) ) : 32'dz;
+assign cos = (trig_rot)? ( X[I-1][N-1] ? -((~X[I-1] + 1)*(0.6071)) : (X[I-1]*0.6072) ) : 32'dz;
 
 endmodule
