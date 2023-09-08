@@ -68,35 +68,52 @@ The incrementat/decrement angle( arctan(2^(-i)) ) is taken from the look-up tabl
 ## [Test Bench](Design_files/tb_CORDIC_UNIT.v) and Results
 To test the module in both modes following inputs are provided:
 ```
-    trig_rot = 1;
-    angle = 32'b001_00001100000101010010001110000; // pi/3(60 degrees)
+    trig_rot = 0;
     
-    #200
-    trig_rot = 0; 
-    angle = 32'b000_01000011000001010100100100001; // pi/12 (15 degrees)
-    Xi = 32'b000_10110101000001001110011000011; // 1/sqrt(2)
-    Yi = 32'b000_10110101000001001110011000011; // 1/sqrt(2)
-    #185
+    #10 
+    Xi = 32'b0000_1011010100000100111100110011; // 1/sqrt(2)
+    Yi = 32'b0000_1011010100000100111100110011; // 1/sqrt(2)
+    angle = 32'b0000_1000011000001010100001001011; // pi/6
+    #10
+    angle = 32'b1111_0111100111110101011110110101; // -pi/6
+    #10
+    angle = 32'b0010_0001100000101010010001110000; // 2pi/3
+    #10
+    angle = 32'b1101_1110011111010101101110010000; // -2pi/3
+    #10
+    angle = 32'b0011_1010101001001001111111000100; // 7pi/6
+    #10
+    angle = 32'b1100_0101010110110110000000111100; // -7pi/6
+    #10
+    angle = 32'b0101_0011110001101001101100001001; // 5pi/3
+    #10
+    angle = 32'b1010_1100001110010110010011110111; // -5pi/3
+    #10
+    trig_rot = 1;
+    angle = 32'b0000_1000011000001010100001001011; // pi/6
+    #10
+    angle = 32'b1111_0111100111110101011110110101; // -pi/6
+    #10
+    angle = 32'b0010_0001100000101010010001110000; // 2pi/3
+    #10
+    angle = 32'b1101_1110011111010101101110010000; // -2pi/3
+    #10
+    angle = 32'b0011_1010101001001001111111000100; // 7pi/6
+    #10
+    angle = 32'b1100_0101010110110110000000111100; // -7pi/6
+    #10
+    angle = 32'b0101_0011110001101001101100001001; // 5pi/3
+    #10
+    angle = 32'b1010_1100001110010110010011110111; // -5pi/3
+    #10
     $finish;
 ```
 
-The expected outputs for these are _cos(60)/0.6072 = 0.82345191_ and _sin(60)/0.6072 = 1.426260546_
-(scaling correction is not employed currently)
+Both rotation and trigonometric modes with both positive and negative angles in all the quadrants are tested here in this test bench.
 
 ![output](https://github.com/SudeepJoshi22/SynthoSphere_CORDIC_Unit/blob/main/images/output.png)
-![output](https://github.com/SudeepJoshi22/SynthoSphere_CORDIC_Unit/blob/main/images/Screenshot%20from%202023-08-26%2003-07-10.png)
 
-Cos:
-![cos](https://github.com/SudeepJoshi22/SynthoSphere_CORDIC_Unit/blob/main/images/cos.png)
-
-Sin:
-![sin](https://github.com/SudeepJoshi22/SynthoSphere_CORDIC_Unit/blob/main/images/sin.png)
-
-Xr:
-![xr](https://github.com/SudeepJoshi22/SynthoSphere_CORDIC_Unit/blob/main/images/Xr.png)
-
-Yr:
-![yr](https://github.com/SudeepJoshi22/SynthoSphere_CORDIC_Unit/blob/main/images/Yr.png)
+The output is verified by converting the Q4.28 format to signed decimal using ![Qm.n-and-Integer-Interconversions](https://github.com/SudeepJoshi22/Qm.n-and-Integer-Interconversions)
 
 
 ## YOSYS Synthesis
