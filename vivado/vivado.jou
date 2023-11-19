@@ -1,0 +1,46 @@
+#-----------------------------------------------------------
+# Vivado v2014.4 (64-bit)
+# SW Build 1071353 on Tue Nov 18 16:47:07 MST 2014
+# IP Build 1070531 on Tue Nov 18 01:10:18 MST 2014
+# Start of session at: Sun Nov 19 19:13:48 2023
+# Process ID: 36780
+# Log file: /home/sudeep/Documents/Project-GITHUB/CORDIC_Unit/vivado/vivado.log
+# Journal file: /home/sudeep/Documents/Project-GITHUB/CORDIC_Unit/vivado/vivado.jou
+#-----------------------------------------------------------
+start_gui
+create_project CORDIC /home/sudeep/Documents/Project-GITHUB/CORDIC_Unit/vivado/CORDIC -part xc7a200tfbg676-2
+set_property board_part xilinx.com:ac701:part0:1.1 [current_project]
+add_files -norecurse {/home/sudeep/Documents/Project-GITHUB/CORDIC_Unit/Design_files/shift.v /home/sudeep/Documents/Project-GITHUB/CORDIC_Unit/Design_files/arctan_lookup.v /home/sudeep/Documents/Project-GITHUB/CORDIC_Unit/Design_files/test.v /home/sudeep/Documents/Project-GITHUB/CORDIC_Unit/Design_files/CORDIC_UNIT.v /home/sudeep/Documents/Project-GITHUB/CORDIC_Unit/Design_files/correction.v /home/sudeep/Documents/Project-GITHUB/CORDIC_Unit/Design_files/add_sub.v}
+update_compile_order -fileset sources_1
+update_compile_order -fileset sources_1
+update_compile_order -fileset sim_1
+update_compile_order -fileset sources_1
+set_property SOURCE_SET sources_1 [get_filesets sim_1]
+add_files -fileset sim_1 -norecurse {/home/sudeep/Documents/Project-GITHUB/CORDIC_Unit/Design_files/tb_shift.v /home/sudeep/Documents/Project-GITHUB/CORDIC_Unit/Design_files/tb_CORDIC_UNIT.v /home/sudeep/Documents/Project-GITHUB/CORDIC_Unit/Design_files/tb_correction.v /home/sudeep/Documents/Project-GITHUB/CORDIC_Unit/Design_files/tb_add_sub.v /home/sudeep/Documents/Project-GITHUB/CORDIC_Unit/Design_files/tb_arctan_lookup.v}
+update_compile_order -fileset sim_1
+update_compile_order -fileset sim_1
+update_compile_order -fileset sim_1
+launch_simulation
+source tb_add_sub.tcl
+# Disabling source management mode.  This is to allow the top design properties to be set without GUI intervention.
+set_property source_mgmt_mode None [current_project]
+set_property top test_cordic_unit [get_filesets sim_1]
+set_property top_lib xil_defaultlib [get_filesets sim_1]
+# Re-enabling previously disabled source management mode.
+set_property source_mgmt_mode All [current_project]
+update_compile_order -fileset sim_1
+launch_simulation
+source test_cordic_unit.tcl
+synth_design -rtl -name rtl_1
+launch_runs synth_1
+wait_on_run synth_1
+close_design
+open_run synth_1 -name synth_1
+synth_design -rtl -name rtl_1
+report_ssn -name ssn_1
+current_design synth_1
+report_drc -name drc_1
+report_timing_summary -delay_type min_max -report_unconstrained -check_timing_verbose -max_paths 10 -input_pins -name timing_1
+report_utilization -name utilization_1
+set_property IOSTANDARD {} [get_ports [list {cos[31]} {cos[30]} {cos[29]} {cos[28]} {cos[27]} {cos[26]} {cos[25]} {cos[24]} {cos[23]} {cos[22]} {cos[21]} {cos[20]} {cos[19]} {cos[18]} {cos[17]} {cos[16]} {cos[15]} {cos[14]} {cos[13]} {cos[12]} {cos[11]} {cos[10]} {cos[9]} {cos[8]} {cos[7]} {cos[6]} {cos[5]} {cos[4]} {cos[3]} {cos[2]} {cos[1]} {cos[0]}]]
+report_power -name {power_1}

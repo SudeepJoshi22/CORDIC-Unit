@@ -4,7 +4,7 @@
 // Description: CORDIC UNIT MODULE.
 // N - data size, I - number of iterations(maximum 28)
 // trig_rot: '0' - compute sine and cosine of the angle, '1' - rotate the vector (Xi,Yi) by the input angle
-// Q3.29 fixed-point representation is used. Range: -4 to 3.999999998137355
+// Q4.28 fixed-point representation is used. Range: -8 to 7.99999999627471
 ////////////////////////////////////////////////////////////////////////////////
 
 module CORDIC_UNIT 
@@ -35,6 +35,8 @@ parameter signed p2pi = 32'b0110_0100100001111110110101010001; // 2pi
 wire signed [N-1:0] X [0:I-1];
 wire signed [N-1:0] Y [0:I-1];
 wire signed [N-1:0] Z [0:I-1];
+
+wire signed [N-1:0] X_cor, Y_cor;
 
 reg signed [N-1:0] X0,Y0,Z0;
 
@@ -73,7 +75,7 @@ always @(*)
 begin
 	if( ((angle >= pi2) && (angle < pi)) || ((angle <= npi2) && (angle > npi)) )
 		begin
-			$display("condition1");
+			//$display("condition1");
 			if(trig_rot) begin //calculate trig functions
 				if(angle[N-1]) begin // if angle is negative
 					X0 = 32'b0000_0000000000000000000000000000;
@@ -101,7 +103,7 @@ begin
 		end
 	else if( ((angle >= pi) && (angle < p3pi2)) || ((angle <= npi) && (angle > n3pi2)) )
 		begin
-		$display("condition2");
+		//$display("condition2");
 			if(trig_rot) begin //calculate trig functions
 				if(angle[N-1]) begin // if angle is negative
 					X0 = 32'b1111_0000000000000000000000000000;
@@ -129,7 +131,7 @@ begin
 		end
 	else if( (angle >= p3pi2) || (angle <= n3pi2) )
 		begin
-		$display("condition3");
+		//$display("condition3");
 			if(trig_rot) begin //calculate trig functions
 				if(angle[N-1]) begin // if angle is negative
 					X0 = 32'b0000_0000000000000000000000000000;
@@ -157,7 +159,7 @@ begin
 		end
 	else
 		begin
-		$display("condition4");
+		//$display("condition4");
 			if(trig_rot) begin //calculate trig functions
 				if(angle[N-1]) begin // if angle is negative
 					X0 = 32'b0001_0000000000000000000000000000;
@@ -212,9 +214,19 @@ begin
 end
 endgenerate
 
+correction #(N) correction_X(X[I-1], X_cor);
+correction #(N) correction_Y(Y[I-1], Y_cor);
+
+/*
 assign Xr = (trig_rot)? 32'dz : ( X[I-1][N-1] ? -((~X[I-1] + 1)*(0.6072)) : (X[I-1]*0.6072) );
 assign Yr = (trig_rot)? 32'dz : ( Y[I-1][N-1] ? -((~Y[I-1] + 1)*(0.6072)) : (Y[I-1]*0.6072) );
 assign sin = (trig_rot)? ( Y[I-1][N-1] ? -((~Y[I-1] + 1)*(0.6072)) : (Y[I-1]*0.6072) ) : 32'dz;
 assign cos = (trig_rot)? ( X[I-1][N-1] ? -((~X[I-1] + 1)*(0.6072)) : (X[I-1]*0.6072) ) : 32'dz;
+*/
+
+assign Xr = (trig_rot)? 32'dz : X_cor;
+assign Yr = (trig_rot)? 32'dz : Y_cor;
+assign sin = (trig_rot)? Y_cor : 32'dz;
+assign cos = (trig_rot)? X_cor : 32'dz;
 
 endmodule

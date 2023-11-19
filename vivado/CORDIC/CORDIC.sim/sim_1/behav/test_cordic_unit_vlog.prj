@@ -1,0 +1,8 @@
+# compile verilog/system verilog design source files
+verilog xil_defaultlib  "../../../../../Design_files/correction.v"
+verilog xil_defaultlib  "../../../../../Design_files/add_sub.v"
+verilog xil_defaultlib  "../../../../../Design_files/CORDIC_UNIT.v"
+verilog xil_defaultlib  "../../../../../Design_files/tb_CORDIC_UNIT.v"
+
+# compile glbl module
+verilog xil_defaultlib "glbl.v"
