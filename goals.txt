@@ -1,0 +1,7 @@
+v1.0
+- Add a generator/Makefile script which generates the CORDIC for given Qm.n numbers and Number of iterations.
+- Only Circular Mode.
+- Keep sin/cos and rot_trig mode for now, later change it accordingly.
+- Verify using cocotb.
+- Synthesize on FPGA.
+- 
