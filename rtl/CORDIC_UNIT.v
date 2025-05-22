@@ -11,84 +11,115 @@ module CORDIC_UNIT
 	parameter N = 32,
 	parameter I = 10)
 (
+	input	wire				clk,
+	input	wire				rst_n,
+	input	wire				start,
 	input 	wire	signed 	[N-1:0] 	Xi,
 	input 	wire	signed 	[N-1:0] 	Yi,
 	input 	wire	signed 	[N-1:0] 	Zi,
 	input	wire				rot_vec,		
 	output 	wire	signed 	[N-1:0] 	Xr,
-	output 	wire	signed 	[N-1:0] 	Yr
+	output 	wire	signed 	[N-1:0] 	Yr,
+	output	wire	signed 	[N-1:0]		Zr,
+	output	wire				done
 );
 
 /** Internal Wires **/
 
-	wire 	signed 	[N-1:0] 	X [0:I-1];
-	wire 	signed 	[N-1:0] 	Y [0:I-1];
-	wire 	signed 	[N-1:0] 	Z [0:I-1];
 
 /** Internal Registers **/
 
+	reg signed 	[N-1:0] 	X [0:I-1];
+	reg signed 	[N-1:0] 	Y [0:I-1];
+	reg signed 	[N-1:0] 	Z [0:I-1];
 
-wire signed [N-1:0] X_cor, Y_cor;
+    // delay line for 'start' to generate 'done'
+    reg start_d [0:I];
 
-reg signed [N-1:0] X0,Y0,Z0;
+    integer k;
+    genvar j;
 
-wire [N-1:0] lookup_table[0:31];
+    // Stage-0: capture inputs
+    always @(posedge clk or negedge rst_n) begin
+        if (!rst_n) begin
+            X[0]     <= 0;
+            Y[0]     <= 0;
+            Z[0]     <= 0;
+            start_d[0] <= 1'b0;
+        end else begin
+            X[0]     <= Xi;
+            Y[0]     <= Yi;
+            Z[0]     <= Zi;
+            start_d[0] <= start;
+        end
+    end
 
-assign lookup_table[0]  = 32'b0000_1100100100001111110110101010;
-assign lookup_table[1]  = 32'b0000_0111011010110001100111000001;
-assign lookup_table[2]  = 32'b0000_0011111010110110111010111111;
-assign lookup_table[3]  = 32'b0000_0001111111010101101110101001;
-assign lookup_table[4]  = 32'b0000_0000111111111010101011011101;
-assign lookup_table[5]  = 32'b0000_0000011111111111010101010110;
-assign lookup_table[6]  = 32'b0000_0000001111111111111010101010;
-assign lookup_table[7]  = 32'b0000_0000000111111111111111010101;
-assign lookup_table[8]  = 32'b0000_0000000011111111111111111010;
-assign lookup_table[9]  = 32'b0000_0000000001111111111111111111;
-assign lookup_table[10] = 32'b0000_0000000000111111111111111111;
-assign lookup_table[11] = 32'b0000_0000000000011111111111111111;
-assign lookup_table[12] = 32'b0000_0000000000001111111111111111;
-assign lookup_table[13] = 32'b0000_0000000000000111111111111111;
-assign lookup_table[14] = 32'b0000_0000000000000011111111111111;
-assign lookup_table[15] = 32'b0000_0000000000000001111111111111;
-assign lookup_table[16] = 32'b0000_0000000000000000111111111111;
-assign lookup_table[17] = 32'b0000_0000000000000000011111111111;
-assign lookup_table[18] = 32'b0000_0000000000000000001111111111;
-assign lookup_table[19] = 32'b0000_0000000000000000000111111111;
-assign lookup_table[20] = 32'b0000_0000000000000000000011111111;
-assign lookup_table[21] = 32'b0000_0000000000000000000001111111;
-assign lookup_table[22] = 32'b0000_0000000000000000000000111111;
-assign lookup_table[23] = 32'b0000_0000000000000000000000011111;
-assign lookup_table[24] = 32'b0000_0000000000000000000000001111;
-assign lookup_table[25] = 32'b0000_0000000000000000000000000111;
-assign lookup_table[26] = 32'b0000_0000000000000000000000000011;
-assign lookup_table[27] = 32'b0000_0000000000000000000000000001;	
+    // CORDIC pipeline stages
+    generate
+        for (j = 0; j < I; j = j + 1) begin : cordic_stages
+            wire signed [N-1:0] angle;
+            // lookup arctan(2^-j)
+            arctan_lookup #(
+                .N   (N),
+                .I   (I)
+            ) lut (
+                .clk    (clk),
+                .rst_n  (rst_n),
+                .j      (j[$clog2(I)-1:0]),
+                .arctan (angle)
+            );
 
-assign X[0] = X0;
-assign Y[0] = Y0;
-assign Z[0] = Z0;
+            // one-stage shift-add rotation/vectoring
+            always @(posedge clk or negedge rst_n) begin
+                if (!rst_n) begin
+                    X[j+1]     <= 0;
+                    Y[j+1]     <= 0;
+                    Z[j+1]     <= 0;
+                    start_d[j+1] <= 1'b0;
+                end else begin
+                    // propagate start
+                    start_d[j+1] <= start_d[j];
 
+                    // choose direction: in rotation mode, based on Z; in vectoring, based on X, Y signs
+                    if (rot_vec) begin
+                        // vectoring mode: rotate to drive X,Y to zero: direction = sign(X)*sign(Y)
+                        if (Y[j] >= 0) begin
+                            X[j+1] <= X[j] + (Y[j] >>> j);
+                            Y[j+1] <= Y[j] - (X[j] >>> j);
+                            Z[j+1] <= Z[j] + angle;
+                        end else begin
+                            X[j+1] <= X[j] - (Y[j] >>> j);
+                            Y[j+1] <= Y[j] + (X[j] >>> j);
+                            Z[j+1] <= Z[j] - angle;
+                        end
+                    end else begin
+                        // rotation mode: rotate by +angle if Z<0, else -angle
+                        if (Z[j] >= 0) begin
+                            X[j+1] <= X[j] - (Y[j] >>> j);
+                            Y[j+1] <= Y[j] + (X[j] >>> j);
+                            Z[j+1] <= Z[j] - angle;
+                        end else begin
+                            X[j+1] <= X[j] + (Y[j] >>> j);
+                            Y[j+1] <= Y[j] - (X[j] >>> j);
+                            Z[j+1] <= Z[j] + angle;
+                        end
+                    end
+                end
+            end
+        end
+    endgenerate
 
-genvar i;
+    // Output assignments
+    assign Xr = X[I];
+    assign Yr = Y[I];
+    assign Zr = Z[I];
 
-generate
-for(i = 0;i < I-1;i = i+1)
-begin
-	wire sign;
-	wire [N-1:0] X_sft,Y_sft;
-
-	assign sign = Z[i][N-1];	
-	assign X_sft = X[i] >>> i;
-	assign Y_sft = Y[i] >>> i;
-	
-	add_sub #(N) add_sub_X(X[i],Y_sft,~sign,X[i+1]);
-	add_sub #(N) add_sub_Y(Y[i],X_sft,sign,Y[i+1]);
-	add_sub #(N) add_sub_Z(Z[i],lookup_table[i],~sign,Z[i+1]);
-	
-	
-end
-endgenerate
-
-correction #(N) correction_X(X[I-1], X_cor);
-correction #(N) correction_Y(Y[I-1], Y_cor);
+    // done pulse when the delayed start emerges after I stages
+    always @(posedge clk or negedge rst_n) begin
+        if (!rst_n)
+            done <= 1'b0;
+        else
+            done <= start_d[I];
+    end
 
 endmodule

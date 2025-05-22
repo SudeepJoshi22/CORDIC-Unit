@@ -1,3 +1,5 @@
 /venv
+*/*.swp
+*/*.swo
 *.swp
 *.v

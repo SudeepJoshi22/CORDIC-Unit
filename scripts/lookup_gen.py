@@ -135,7 +135,7 @@ def main() -> None:
 
     if args.genverilog:
         print("\n# Generating Verilog file for the lookup table")
-        with open("lookup.v", "w") as f:
+        with open("rtl/lookup.v", "w") as f:
             f.write(
                 "////////////////////////////////////////////////////////////////////////////////\n"
                 "// Author: Sudeep Joshi\n"
@@ -146,18 +146,24 @@ def main() -> None:
                 f"    parameter N = {1+args.m+args.n},\n"
                 f"    parameter I = {args.niter}\n"
                 ") (\n"
+                "    input  wire                 clk,\n"
+                "    input  wire                 rst_n,\n"
                 "    input  wire [$clog2(I)-1:0] j,\n"
-                "    output wire [N-1:0]         arctan\n"
+                "    output reg  [N-1:0]         arctan\n"
                 ");\n\n"
                 "    reg [N-1:0] lookup_table[0:I];\n\n"
                 "    /*** Python Generated Block ***/\n"
-                "    initial begin\n"
+                "    always @(posedge clk) begin\n"
+                "       if(~rst_n) begin\n"
             )
             for i, hex_val in enumerate(hex_values):
-                f.write(f"        lookup_table[{i}] = 32'h{hex_val};\n")
+                f.write(f"        lookup_table[{i}] <= 32'h{hex_val[2:]};\n")
             f.write(
                 "    end\n\n"
-                "    assign arctan = lookup_table[j];\n\n"
+                "    end\n\n"
+                "    always @(posedge clk) begin\n"
+                "        arctan <= lookup_table[j];\n"
+                "    end \n\n"
                 "endmodule\n"
             )
 
