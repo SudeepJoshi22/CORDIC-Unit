@@ -135,38 +135,23 @@ def main() -> None:
 
     if args.genverilog:
         print("\n# Generating Verilog file for the lookup table")
-        with open("rtl/lookup.v", "w") as f:
-            f.write(
-                "////////////////////////////////////////////////////////////////////////////////\n"
-                "// Author: Sudeep Joshi\n"
-                "// Description: Arctan Look-Up table for CORDIC Unit\n"
-                "////////////////////////////////////////////////////////////////////////////////\n"
-                "`default_nettype none\n\n"
-                "module arctan_lookup #(\n"
-                f"    parameter N = {1+args.m+args.n},\n"
-                f"    parameter I = {args.niter}\n"
-                ") (\n"
-                "    input  wire                 clk,\n"
-                "    input  wire                 rst_n,\n"
-                "    input  wire [$clog2(I)-1:0] j,\n"
-                "    output reg  [N-1:0]         arctan\n"
-                ");\n\n"
-                "    reg [N-1:0] lookup_table[0:I];\n\n"
-                "    /*** Python Generated Block ***/\n"
-                "    always @(posedge clk) begin\n"
-                "       if(~rst_n) begin\n"
-            )
-            for i, hex_val in enumerate(hex_values):
-                f.write(f"        lookup_table[{i}] <= 32'h{hex_val[2:]};\n")
-            f.write(
-                "    end\n\n"
-                "    end\n\n"
-                "    always @(posedge clk) begin\n"
-                "        arctan <= lookup_table[j];\n"
-                "    end \n\n"
-                "endmodule\n"
-            )
 
+        parameters_code = f"parameter N = {1+args.m+args.n},\nparameter I = {args.niter}"
+        
+        with open("rtl/CORDIC_UNIT_TEMPLATE.v", 'r') as fin:
+            verilog_code = fin.read()
+
+        filled_code = verilog_code.replace("//// PUT PARAMETERS HERE ////", parameters_code)
+
+        lookup_init_code = ""
+
+        for i, hex_val in enumerate(hex_values):
+            lookup_init_code += f"\t\t\tlookup_table[{i}] <= 32'h{hex_val[2:]};\n"
+
+        filled_code = filled_code.replace("//// PUT LUT INIT HERE ////", lookup_init_code)
+        
+        with open("rtl/CORDIC_UNIT_GENERATED.v", 'w') as fout:
+            fout.write(filled_code)
 
 if __name__ == "__main__":
     main()
