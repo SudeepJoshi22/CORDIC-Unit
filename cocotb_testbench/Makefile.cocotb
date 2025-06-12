@@ -1,0 +1,10 @@
+SIM ?= icarus
+
+TOPLEVEL_LANG ?= verilog
+
+VERILOG_SOURCES += $(PWD)/../rtl/CORDIC_UNIT_GENERATED.v
+
+cordic:
+	$(MAKE) sim MODULE=test_CORDIC_UNIT TOPLEVEL=CORDIC_UNIT
+
+include $(shell cocotb-config --makefiles)/Makefile.sim

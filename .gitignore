@@ -1,4 +1,5 @@
 /venv
+*/sim_build
 */*.swp
 */*.swo
 *.swp
