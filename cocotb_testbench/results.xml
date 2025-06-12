@@ -1,8 +1,0 @@
-<testsuites name="results">
-  <testsuite name="all" package="all">
-    <property name="random_seed" value="1749725227" />
-    <testcase name="test_CORDIC_UNIT" classname="test_CORDIC_UNIT" file="/home/sudeep/GitHub/CORDIC_Unit/cocotb_testbench/test_CORDIC_UNIT.py" lineno="13" time="0.0007090568542480469" sim_time_ns="10.001" ratio_time="14104.651749831875">
-      <failure message="Test failed with RANDOM_SEED=1749725227" />
-    </testcase>
-  </testsuite>
-</testsuites>
