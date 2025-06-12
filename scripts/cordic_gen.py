@@ -11,6 +11,7 @@ Optionally, angles can be quantized into signed Qm.n format within 32 bits.
 import argparse
 import math
 import sys
+import os
 
 
 def generate_cordic_lut(n_iter: int) -> tuple[list[float], float]:
@@ -132,11 +133,14 @@ def main() -> None:
             print(f"iter {i:2d}: {hex_val}")
 
     print(f"\n# CORDIC Gain K = {K:.12f}")
-
+    
+    with open("cordic_k", "w") as f:
+        f.write(f"{K}\n") 
+    
     if args.genverilog:
         print("\n# Generating Verilog file for the lookup table")
 
-        parameters_code = f"parameter N = {1+args.m+args.n},\nparameter I = {args.niter}"
+        parameters_code = f"parameter N = {1+args.m+args.n},\nparameter I = {args.niter},"
         
         with open("rtl/CORDIC_UNIT_TEMPLATE.v", 'r') as fin:
             verilog_code = fin.read()

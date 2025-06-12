@@ -5,8 +5,28 @@ M       ?= 1   # integer bits (excluding sign)
 N       ?= 15  # fractional bits
 ITER    ?= 15  # number of CORDIC iterations
 
-# Path to the downstream Cocotb Makefile
-COCO_TARGET ?= cocotb_testbench/Makefile.cocotb
+# Export these variables to be read by the cocotb-testbench Python file
+export N
+export M
+export ITER
+
+SIM ?= icarus
+
+TOPLEVEL_LANG ?= verilog
+
+VERILOG_SOURCES += $(PWD)/rtl/CORDIC_UNIT_GENERATED.v
+
+PYTHONPATH := $(PYTHONPATH):$(PWD)/cocotb_testbench:$(PWD)/utils
+export PYTHONPATH
+
+# Enable waveform dump if WAVES is set
+ifeq ($(WAVES), 1)
+    COCOTB_WAVES ?= 1
+endif
+
+export COCOTB_WAVES
+
+include $(shell cocotb-config --makefiles)/Makefile.sim
 
 # Export environment variables for generation and testing
 export M N ITER
@@ -26,8 +46,8 @@ generate:
 # Run Cocotb tests via the specified Makefile
 cocotb: generate
 	@echo "Invoking Cocotb tests using '$(COCO_TARGET)'"
-	@$(MAKE) -f $(COCO_TARGET) cordic 
+	
+	@cd cocotb_testbench
 
-# Cleanup generated files
-clean:
-	@echo "Nothing to clean"
+	$(MAKE) sim MODULE=cocotb_testbench.test_CORDIC_UNIT TOPLEVEL=CORDIC_UNIT
+

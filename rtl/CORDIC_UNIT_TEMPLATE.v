@@ -8,18 +8,19 @@
 
 module CORDIC_UNIT 
 #(
-//// PUT PARAMETERS HERE ////)
+//// PUT PARAMETERS HERE ////
+parameter WAVES = 1)
 (
 	input	wire						clk,
 	input	wire						rst_n,
 	input	wire						start,		// Signal to indicate the start of CORDIC interation
-	input 	wire	signed 	[N-1:0] 	Xi,
-	input 	wire	signed 	[N-1:0] 	Yi,
-	input 	wire	signed 	[N-1:0] 	Zi,
+	input 	wire	signed 	[N-1:0] 			Xi,
+	input 	wire	signed 	[N-1:0] 			Yi,
+	input 	wire	signed 	[N-1:0] 			Zi,
 	input	wire						rot_vec,	// rot_vec = 0: Rotation mode, rot_vec = 1: Vectoring mode 
-	output 	wire	signed 	[N-1:0] 	Xr,
-	output 	wire	signed 	[N-1:0] 	Yr,
-	output	wire	signed 	[N-1:0]		Zr,
+	output 	wire	signed 	[N-1:0] 			Xr,
+	output 	wire	signed 	[N-1:0] 			Yr,
+	output	wire	signed 	[N-1:0]				Zr,
 	output	wire						done
 );
 
@@ -111,5 +112,14 @@ module CORDIC_UNIT
 	assign	Xr		=	done ? X[I-1]	: 'dZ;
 	assign	Yr		=	done ? Y[I-1]	: 'dZ;
 	assign	Zr		=	done ? Z[I-1]	: 'dZ;
+
+
+initial begin
+    if(WAVES) begin
+    $display("WAVES defined: waveform.vcd will be generated");
+    $dumpfile("waveform.vcd");
+    $dumpvars(0, CORDIC_UNIT); 
+    end
+end
 
 endmodule

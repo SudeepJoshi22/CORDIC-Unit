@@ -1,6 +1,10 @@
 /venv
 */sim_build
+sim_build/
 */*.swp
 */*.swo
 *.swp
+cordic_k
 *.o
+*.vcd
+*.xml
