@@ -44,7 +44,7 @@ generate:
 	@python scripts/cordic_gen.py --m $(M) --n $(N) -N $(ITER) -V
 
 # Run Cocotb tests via the specified Makefile
-cocotb: generate
+test: generate
 	@echo "Invoking Cocotb tests using '$(COCO_TARGET)'"
 	
 	@cd cocotb_testbench
