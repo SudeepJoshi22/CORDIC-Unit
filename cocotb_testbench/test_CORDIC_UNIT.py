@@ -96,8 +96,8 @@ async def test_rotation_45deg(dut):
     zr = from_q_format(format(zr_int & ((1<<Q_TOTAL)-1), f'0{Q_TOTAL}b'), M, N)
 
     # Expected results
-    expected_x = 0.7071 / K
-    expected_y = 0.7071 / K
+    expected_x = 0.7071 * K
+    expected_y = 0.7071 * K
     expected_z = 0.0
 
     # Tolerance
@@ -111,8 +111,8 @@ async def test_rotation_45deg(dut):
     assert abs(yr - expected_y) <= tol, f"Yr = {yr}, expected ~ {expected_y}"
     assert abs(zr - expected_z) <= tol, f"Zr = {zr}, expected ~ {expected_z}"
 
-    x_correct = xr * K
-    y_correct = yr * K
+    x_correct = xr / K
+    y_correct = yr / K
 
     dut._log.info(f"Actual Final Values: Xr={xr}, Yr={yr}, Zr={zr}")
     dut._log.info(f"Scaling Factor Corrected Final Values: Xr={x_correct}, Yr={y_correct}")
@@ -126,8 +126,8 @@ async def test_rotate_full_quadrant(dut):
         angle_rad, cos, sin = gen_radian(angle)
         (xr, yr, zr) = await rotate_vector_modes(dut, 1.0, 0.0, angle_rad, 0)
 
-        xr_corrected = xr * K
-        yr_corrected = yr * K
+        xr_corrected = xr / K
+        yr_corrected = yr / K
 
         dut._log.info(f"\tXr Corrected : {xr_corrected}, Yr Corrected : {yr_corrected}")
         dut._log.info(f"\tcos({angle}) = {cos}, sin({angle}) = {sin}\n")
@@ -138,12 +138,12 @@ async def test_vectoring(dut):
     """
     x = -2
     y = -2
-    while x < 2:
-        while y < 2:
-            if x == 0 or y == 0:
-                continue
+    while x <= 2:
+        if x == 0:
                 x += 0.25
-                y += 0.25
+                continue
+        while y <= 2:
+            
             # Zin is being set to zero
             dut._log.info(f"Vectoring ({x},{y})") 
 
@@ -153,8 +153,9 @@ async def test_vectoring(dut):
             (x_f, y_f, z_f) = vector_equation(x, y, 0)
             dut._log.info(f"\tExpected final values in Vectoring mode: x_f = {x_f} y_f = {y_f} z_f = {z_f}\n")
             
-            x += 0.25
             y += 0.25
+        x += 0.25
+        y = -2
 
 async def rotate_vector_modes(dut, x_in, y_in, z_in, rot_vec):
     """

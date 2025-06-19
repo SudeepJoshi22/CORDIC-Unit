@@ -3,7 +3,7 @@ CORDIC Lookup Table and Gain Generator with optional Qm.n fixed-point output.
 
 This module generates:
   - angles = [atan(2**-i) for i in range(n_iter)]
-  - K = product_{i=0..n_iter-1} (1/sqrt(1 + 2**(-2*i)))
+  - K = product_{i=0..n_iter-1} (sqrt(1 + 2**(-2*i)))
 
 Optionally, angles can be quantized into signed Qm.n format within 32 bits.
 """
@@ -32,7 +32,7 @@ def generate_cordic_lut(n_iter: int) -> tuple[list[float], float]:
     for i in range(n_iter):
         angle = math.atan(2.0 ** -i)
         angles.append(angle)
-        K *= 1.0 / math.sqrt(1.0 + 2.0 ** (-2.0 * i))
+        K *= math.sqrt(1.0 + 2.0 ** (-2.0 * i))
 
     return angles, K
 

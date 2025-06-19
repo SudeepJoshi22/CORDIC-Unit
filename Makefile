@@ -1,8 +1,8 @@
 # Parent Makefile: generate Verilog and invoke Cocotb Makefile
 
 # Q-format parameters and iteration count (override via CLI, e.g., make M=2 N=14 ITER=20)
-M       ?= 1   # integer bits (excluding sign)
-N       ?= 15  # fractional bits
+M       ?= 8   # integer bits (excluding sign)
+N       ?= 23  # fractional bits
 ITER    ?= 15  # number of CORDIC iterations
 
 # Export these variables to be read by the cocotb-testbench Python file

@@ -78,9 +78,9 @@ parameter WAVES = 1)
                     // propagate start
                     start_d[j+1] <= start_d[j];
 
-                    // choose direction: in rotation mode, based on Z; in vectoring, based on X, Y signs
+                    // choose direction: in rotation mode, based on Z; in vectoring, based on  Y 
                     if (rot_vec) begin
-                        // vectoring mode: rotate to drive X,Y to zero: direction = sign(X)*sign(Y)
+                        // vectoring mode: direction = *sign(Y)
                         if (Y[j] >= 0) begin
                             X[j+1] <= X[j] + (Y[j] >>> j);
                             Y[j+1] <= Y[j] - (X[j] >>> j);
@@ -91,7 +91,7 @@ parameter WAVES = 1)
                             Z[j+1] <= Z[j] - lookup_table[j];
                         end
                     end else begin
-                        // rotation mode: rotate by +angle if Z<0, else -angle
+                        // rotation mode: direction = *sign(Z)
                         if (Z[j] >= 0) begin
                             X[j+1] <= X[j] - (Y[j] >>> j);
                             Y[j+1] <= Y[j] + (X[j] >>> j);
