@@ -17,7 +17,7 @@ Q_TOTAL = 1 + M + N
 iterations = int(os.environ["ITER"])
 
 with open('cordic_k', 'r') as f:
-	K = f.read()
+    K = f.read()
 K = float(K)
 
 @cocotb.test
@@ -68,15 +68,15 @@ async def test_rotation_45deg(dut):
     print(f"\tInput Values Zi : {z_bits} int: {hex(z_int)}")
     
     # Drive inputs
-    dut.Xi.value 	= x_int
-    dut.Yi.value	= y_int
-    dut.Zi.value	= z_int
-    dut.rot_vec.value	= rot_vec
+    dut.Xi.value    = x_int
+    dut.Yi.value    = y_int
+    dut.Zi.value    = z_int
+    dut.rot_vec.value   = rot_vec
 
     # Pulse start
-    dut.start.value	= 1
+    dut.start.value = 1
     await RisingEdge(dut.clk)
-    dut.start.value	= 0
+    dut.start.value = 0
 
     # Wait for done
     while True:
@@ -122,10 +122,15 @@ async def test_rotate_full_quadrant(dut):
     Tests by rotating the (0,0) vector from 0 degrees to 90 degress
     """
     for angle in range(0,95,5):
-	    dut._log.info(f"Rotating (1,0) by the angle {angle}")
-	    angle_rad, cos, sin = gen_radian(angle)
-	    await rotate_vector_modes(dut, 1, 0, angle_rad, 0)
-	    dut._log.info(f"\tcos({angle}) = {cos}, sin({angle}) = {sin}\n")
+        dut._log.info(f"Rotating (1,0) by the angle {angle}")
+        angle_rad, cos, sin = gen_radian(angle)
+        (xr, yr, zr) = await rotate_vector_modes(dut, 1.0, 0.0, angle_rad, 0)
+
+        xr_corrected = xr * K
+        yr_corrected = yr * K
+
+        dut._log.info(f"\tXr Corrected : {xr_corrected}, Yr Corrected : {yr_corrected}")
+        dut._log.info(f"\tcos({angle}) = {cos}, sin({angle}) = {sin}\n")
 
 async def test_vectoring(dut):
     """
@@ -134,17 +139,22 @@ async def test_vectoring(dut):
     x = -2
     y = -2
     while x < 2:
-	    while y < 2:
-		    if x == 0 or y == 0:
-			    continue
-		    # Zin is being set to zero
-		    dut._log.info(f"Vectoring ({x},{y})") 
-		    x_f, y_f, z_f = vector_equation(x, y, 0)
-		    await rotate_vector_modes(dut, x, y, 0, 1)
-		    dut._log.info(f"Expected final values in Vectoring mode: x_f = {x_f} y_f = {y_f} z_f = {z_f}")
-		    
-		    x += 0.25
-		    y += 0.25
+        while y < 2:
+            if x == 0 or y == 0:
+                continue
+                x += 0.25
+                y += 0.25
+            # Zin is being set to zero
+            dut._log.info(f"Vectoring ({x},{y})") 
+
+            (x_v, y_v, z_v) = await rotate_vector_modes(dut, x, y, 0, 1)
+            dut._log.info(f"\tFinal Values After Vectoring X_f = {x_v}, Y_f = {y_v}, Z_f = {z_v}") 
+            
+            (x_f, y_f, z_f) = vector_equation(x, y, 0)
+            dut._log.info(f"\tExpected final values in Vectoring mode: x_f = {x_f} y_f = {y_f} z_f = {z_f}\n")
+            
+            x += 0.25
+            y += 0.25
 
 async def rotate_vector_modes(dut, x_in, y_in, z_in, rot_vec):
     """
@@ -161,15 +171,15 @@ async def rotate_vector_modes(dut, x_in, y_in, z_in, rot_vec):
     dut._log.info(f"\tInput Values Zi : {z_bits} int: {hex(z_int)}")
     
     # Drive inputs
-    dut.Xi.value 	= x_int
-    dut.Yi.value	= y_int
-    dut.Zi.value	= z_int    
-    dut.rot_vec.value	= rot_vec
+    dut.Xi.value    = x_int
+    dut.Yi.value    = y_int
+    dut.Zi.value    = z_int    
+    dut.rot_vec.value   = rot_vec
 
     # Pulse start
-    dut.start.value	= 1
+    dut.start.value = 1
     await RisingEdge(dut.clk)
-    dut.start.value	= 0
+    dut.start.value = 0
 
     # Wait for done
     while True:
@@ -188,10 +198,11 @@ async def rotate_vector_modes(dut, x_in, y_in, z_in, rot_vec):
     yr = from_q_format(format(yr_int & ((1<<Q_TOTAL)-1), f'0{Q_TOTAL}b'), M, N)
     zr = from_q_format(format(zr_int & ((1<<Q_TOTAL)-1), f'0{Q_TOTAL}b'), M, N)
     
-    corrected_x = xr * K
-    corrected_y = yr * K
-
-    dut._log.info(f"\tFinal Corrected Values = X: {corrected_x} Y: {corrected_y}\n")
+    #corrected_x = xr * K
+    #corrected_y = yr * K
+    
+    return xr, yr, zr
+    #dut._log.info(f"\tFinal Corrected Values = X: {corrected_x} Y: {corrected_y}\n")
 
 
 #async linear(dut, x_in, y_in, z_in):
