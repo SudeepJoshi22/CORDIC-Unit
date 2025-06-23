@@ -33,7 +33,7 @@ The number of clock cycles taken to do one iteration will depend on the `paramet
 ```
 source tools/install_cocotb.sh
 ```
-This script will create a virtual environment and install the cocotb library to run test-bench.
+This script will create a virtual environment and install the cocotb library to run the test-bench.
 
 ### Only Generate the Design
 The Makefile provides three configurable options while generating the RTL.
@@ -44,7 +44,7 @@ The Makefile provides three configurable options while generating the RTL.
 ```
 make generate 
 ```
-By default M=8, N=23 and ITER=15 is taken as default value
+M=8, N=23 and ITER=15 is taken as default value
 
 > [!NOTE]
 > All the value representation will be taken as Qm.n fixed point value with implicit sign bit. 
@@ -58,6 +58,10 @@ make generate M=3 N=28 ITER=29
 
 ### Generate the Design and run CocoTB test-bench
 
+> [!NOTE]
+> Make sure to activate the virtual environment before running the CocoTB Test-Bench.
+> ``` source venv/bin/activate ```
+
 ```
 make test
 ```
@@ -66,3 +70,19 @@ make test M=3 N=28 ITER=29
 ```
 
 ## [CocoTB Test Bench](cocotb_testbench/test_CORDIC_UNIT.py)
+
+Using Python math libraries and inerconversions between float and Qm.n fixed-values using [Q_m_n_conversions.py](cocotb_testbench/Q_m_n_conversions.py) tests are written in CocoTB environment to test the CORDIC with full quadrant inputs and check the values with expected values side-by-side.
+
+#### Tests include
+- test_rotation_45_deg() : Rotates the (1,0) with 45 degrees, the expected values will be cos(45) and sin(45), which will be compared for the defined error tolerence of 1e-4.
+- test_rotate_full_quadrant() : Rotates the (1,0) from 0 to 90 degrees with the increment of 5 deg.
+- test_vectoring() : Tests the CORDIC in vectoring from values ranging from (-2,2) for Xin and Yin with Zin kept as zero. The test will displays the calculated and expected values side-by-side.
+
+## Project Creator
+
+Sudeep Joshi - sudeepj881@gmail.com
+
+Project Link: [CORDIC-Unit](https://github.com/SudeepJoshi22)
+
+LinkdIn: [Sudeep Joshi](https://www.linkedin.com/in/sudeep-joshi-569951207/)
+
