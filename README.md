@@ -74,9 +74,9 @@ make test M=3 N=28 ITER=29
 Using Python math libraries and inerconversions between float and Qm.n fixed-values using [Q_m_n_conversions.py](cocotb_testbench/Q_m_n_conversions.py) tests are written in CocoTB environment to test the CORDIC with full quadrant inputs and check the values with expected values side-by-side.
 
 #### Tests include
-- test_rotation_45_deg() : Rotates the (1,0) with 45 degrees, the expected values will be cos(45) and sin(45), which will be compared for the defined error tolerence of 1e-4.
-- test_rotate_full_quadrant() : Rotates the (1,0) from 0 to 90 degrees with the increment of 5 deg.
-- test_vectoring() : Tests the CORDIC in vectoring from values ranging from (-2,2) for Xin and Yin with Zin kept as zero. The test will displays the calculated and expected values side-by-side.
+- **test_rotation_45_deg()** : Rotates the (1,0) with 45 degrees, the expected values will be cos(45) and sin(45), which will be compared for the defined error tolerence of 1e-4.
+- **test_rotate_full_quadrant()** : Rotates the (1,0) from 0 to 90 degrees with the increment of 5 deg.
+- **test_vectoring()** : Tests the CORDIC in vectoring from values ranging from (-2,2) for Xin and Yin with Zin kept as zero. The test will displays the calculated and expected values side-by-side.
 
 ## Project Creator
 
