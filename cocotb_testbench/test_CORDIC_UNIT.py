@@ -72,9 +72,6 @@ async def test_rotation_45deg(dut):
     dut.Yi.value    = y_int
     dut.Zi.value    = z_int
 
-## [CocoTB Test Bench](cocotb_testbench/test_CORDIC_UNIT.py)
-
-Using Python math libraries and inerconversions between float and Qm.n fixed-values using []
     dut.rot_vec.value   = rot_vec
 
     # Pulse start
